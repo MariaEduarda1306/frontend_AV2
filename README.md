@@ -1,6 +1,6 @@
 # frontend_AV2
 
-Projeto da AV2 de Linguagem de Programação III, desenvolvido como um portal web de vagas de emprego com frontend em HTML, CSS e JavaScript e automação RPA para envio de notificações por WhatsApp e Gmail. A atividade exige um frontend dinâmico consumindo API REST, além de um script funcional para envio real de mensagens por WhatsApp Web e Gmail, com tratamento de erros e registro de logs [file:3][file:1].
+Projeto da AV2 de Linguagem de Programação III, desenvolvido como um portal web de vagas de emprego com frontend em HTML, CSS e JavaScript e automação RPA para envio de notificações por WhatsApp e Gmail. A atividade exige um frontend dinâmico consumindo API REST, além de um script funcional para envio real de mensagens por WhatsApp Web e Gmail, com tratamento de erros e registro de logs.
 
 ## Estrutura
 
@@ -24,11 +24,11 @@ frontend_AV2/
 
 ## Objetivo do projeto
 
-Este projeto implementa a base de um portal de vagas contextualizado para a disciplina, com integração entre interface web e backend em Python exposto por API REST [file:3]. O frontend foi preparado para publicação no GitHub Pages, enquanto os scripts Python de automação foram mantidos para execução local, já que o GitHub Pages hospeda apenas arquivos estáticos [file:3].
+Este projeto implementa a base de um portal de vagas contextualizado para a disciplina, com integração entre interface web e backend em Python exposto por API REST. O frontend foi preparado para publicação no GitHub Pages, enquanto os scripts Python de automação foram mantidos para execução local, já que o GitHub Pages hospeda apenas arquivos estáticos.
 
 ## Frontend
 
-O frontend atende ao requisito de interface funcional com consumo real da API e filtro de vagas por múltiplos critérios [file:3]. A aplicação já inclui:
+O frontend atende ao requisito de interface funcional com consumo real da API e filtro de vagas por múltiplos critérios. A aplicação já inclui:
 
 - listagem de vagas vindas da API;
 - filtro por área;
@@ -57,7 +57,7 @@ const API_ENDPOINTS = {
 
 ## Publicação no GitHub Pages
 
-A atividade aceita entrega por link público do GitHub, então este frontend pode ser publicado diretamente no GitHub Pages [file:3].
+A atividade aceita entrega por link público do GitHub, então este frontend pode ser publicado diretamente no GitHub Pages.
 
 ### Passos
 
@@ -86,7 +86,7 @@ http://localhost:5500
 
 ## Scripts RPA
 
-Os scripts de automação foram preparados para cumprir o requisito de envio real via WhatsApp Web e Gmail, com tratamento de erros e geração de logs, conforme os critérios da atividade [file:3][file:1].
+Os scripts de automação foram preparados para cumprir o requisito de envio real via WhatsApp Web e Gmail, com tratamento de erros e geração de logs, conforme os critérios da atividade.
 
 ### Instalação das dependências
 
@@ -98,11 +98,11 @@ pip install -r requirements.txt
 
 ### Logs
 
-O arquivo `logger_utils.py` cria automaticamente a pasta `logs/` e grava os arquivos de log da automação. Isso ajuda a registrar sucesso ou falha dos envios, algo explicitamente cobrado na avaliação [file:3].
+O arquivo `logger_utils.py` cria automaticamente a pasta `logs/` e grava os arquivos de log da automação. Isso ajuda a registrar sucesso ou falha dos envios, algo explicitamente cobrado na avaliação.
 
 ## WhatsApp
 
-O script `enviar_whatsapp.py` usa `PyWhatKit` para abrir o WhatsApp Web e disparar uma mensagem para um número válido, conforme exigido pela atividade [file:1][file:3].
+O script `enviar_whatsapp.py` usa `PyWhatKit` para abrir o WhatsApp Web e disparar uma mensagem para um número válido, conforme exigido pela atividade.
 
 ### Exemplo de uso
 
@@ -125,7 +125,7 @@ python enviar_whatsapp.py --numero +5548999999999 --nome "Aluno Teste" --vaga "A
 
 ## E-mail com Gmail
 
-O script `enviar_email.py` usa `smtplib` com o servidor SMTP do Gmail, o que atende ao requisito de automação por e-mail previsto no projeto [file:1][file:3].
+O script `enviar_email.py` usa `smtplib` com o servidor SMTP do Gmail, o que atende ao requisito de automação por e-mail previsto no projeto.
 
 ### Arquivo `.env`
 
@@ -150,7 +150,7 @@ python enviar_email.py --destinatario aluno.teste@email.com --nome "Aluno Teste"
 
 ## CORS no backend
 
-Como o frontend e o backend estarão em domínios diferentes, o Flask precisa permitir CORS para o GitHub Pages acessar a API corretamente. Sem isso, o navegador pode bloquear as requisições mesmo com a API online [file:3].
+Como o frontend e o backend estarão em domínios diferentes, o Flask precisa permitir CORS para o GitHub Pages acessar a API corretamente. Sem isso, o navegador pode bloquear as requisições mesmo com a API online.
 
 Exemplo no Flask:
 
@@ -197,7 +197,7 @@ O frontend aceita tanto uma lista direta quanto um objeto contendo a chave `vaga
 
 ## Entrega e apresentação
 
-A atividade pede demonstração em tempo real do portal e prova de envio real de WhatsApp e e-mail para um contato válido da turma-alvo [file:3]. Por isso, a melhor estratégia é:
+A atividade pede demonstração em tempo real do portal e prova de envio real de WhatsApp e e-mail para um contato válido da turma-alvo. Por isso, a melhor estratégia é:
 
 - publicar o frontend no GitHub Pages;
 - deixar o backend ativo no ngrok;
@@ -228,7 +228,7 @@ pip install -r requirements.txt
 
 ## Melhorias futuras
 
-Com base nos requisitos da atividade, esta base ainda pode evoluir para [file:3][file:1]:
+Com base nos requisitos da atividade, esta base ainda pode evoluir para:
 
 - formulário real de candidatura integrado ao backend;
 - chatbot com fluxo de saudação, filtro e candidatura;
