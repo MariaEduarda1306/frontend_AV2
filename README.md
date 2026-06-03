@@ -1,302 +1,106 @@
-# frontend_AV2
+# Portal de Vagas - Frontend
 
-Projeto da AV2 de Linguagem de Programação III, desenvolvido como um portal web de vagas de emprego com frontend em HTML, CSS e JavaScript e automação RPA para envio de notificações por WhatsApp e Gmail. A atividade exige um frontend dinâmico consumindo API REST, além de um script funcional para envio real de mensagens por WhatsApp Web e Gmail, com tratamento de erros e registro de logs.
+Projeto de frontend para um portal de vagas de emprego, desenvolvido para a disciplina Linguagem de Programacao III (AV2). O sistema consome uma API REST (fornecida separadamente) e oferece interface com filtros, chatbot e fluxo de candidatura.
 
-## Estrutura
+## Funcionalidades
 
-```text
+- Listagem de vagas vindas da API
+- Filtro por area e modalidade de trabalho
+- Busca textual por titulo, descricao ou area
+- Teste de conexao com o backend
+- Chatbot interativo (com respostas locais ou IA)
+- Modal de candidatura com envio de dados para a API
+- Tema claro/escuro (manual ou automatico)
+- Layout responsivo (Bootstrap 5 + CSS customizado)
+
+## Tecnologias utilizadas
+
+- HTML5
+- CSS3 (com variaveis CSS para temas)
+- JavaScript (Vanilla JS)
+- Bootstrap 5
+- Google Fonts (Inter)
+
+## Estrutura de pastas
+
 frontend_AV2/
 ├── index.html
-├── README.md
 ├── css/
 │   └── style.css
 ├── js/
-│   ├── config.js
-│   ├── api.js
-│   └── app.js
-├── rpa/
-│   ├── enviar_whatsapp.py
-│   ├── enviar_email.py
-│   ├── logger_utils.py
-│   └── requirements.txt
-└── logs/
-```
+│   ├── config.js     # URL base da API e endpoints
+│   ├── api.js        # Funcoes de requisicao (fetch)
+│   └── app.js        # Logica da interface (filtros, chatbot, candidatura)
+└── README.md
 
-## Objetivo do projeto
+> Os scripts de automacao RPA (WhatsApp/E-mail) ficam em uma pasta separada (rpa/) e sao executados do lado do backend. Este README trata apenas do frontend.
 
-Este projeto implementa a base de um portal de vagas contextualizado para a disciplina, com integração entre interface web e backend em Python exposto por API REST. O frontend foi preparado para publicação no GitHub Pages, enquanto os scripts Python de automação foram mantidos para execução local, já que o GitHub Pages hospeda apenas arquivos estáticos.
+## Configuracao da API
 
-## Frontend
+O frontend consome uma API REST que deve estar rodando em um servidor (local ou via ngrok). Para conectar, edite o arquivo js/config.js e altere a constante API_BASE_URL:
 
-O frontend atende ao requisito de interface funcional com consumo real da API e filtro de vagas por múltiplos critérios. A aplicação já inclui:
+const API_BASE_URL = "https://seu-subdominio.ngrok-free.dev";
 
-- listagem de vagas vindas da API;
-- filtro por área;
-- filtro por modalidade;
-- busca textual;
-- teste de conexão com o backend;
-- candidatura de teste com criação de candidato e posterior inscrição na vaga.
+Se o backend estiver rodando localmente na mesma maquina, use http://127.0.0.1:5000.
 
-### Fluxo de candidatura
+Os endpoints esperados sao:
 
-Para ficar alinhado com a modelagem exigida pela atividade, o frontend realiza a candidatura em duas etapas:
+| Metodo | Endpoint       | Uso no frontend                     |
+|--------|----------------|-------------------------------------|
+| GET    | /              | Teste de conexao                    |
+| GET    | /vagas         | Listar todas as vagas               |
+| POST   | /candidatos    | Cadastrar candidato                 |
+| POST   | /inscricoes    | Realizar inscricao (candidato+vaga) |
+| POST   | /chat          | Enviar mensagem ao chatbot          |
 
-1. envia os dados do candidato para `POST /candidatos`;
-2. recebe o `id` do candidato criado;
-3. envia `candidato_id` e `vaga_id` para `POST /inscricoes`.
+## Como executar localmente
 
-Esse fluxo respeita a separação entre as entidades `Candidato`, `Vaga` e `Inscricao`, conforme os requisitos mínimos da avaliação.
+### Opcao 1 – Servidor HTTP simples (recomendado)
+Na pasta raiz do frontend (frontend_AV2), execute:
 
-### Configuração da API
-
-Edite `js/config.js` e troque a URL de exemplo pelo link atual do ngrok:
-
-```javascript
-const API_BASE_URL = "https://SEU-LINK-NGROK.ngrok-free.app";
-```
-
-Os endpoints atualmente utilizados pelo frontend são:
-
-```javascript
-const API_ENDPOINTS = {
-  vagas: "/vagas",
-  health: "/",
-  candidatos: "/candidatos",
-  candidatura: "/inscricoes"
-};
-```
-
-### Endpoints esperados no backend
-
-Para o frontend funcionar corretamente, o backend deve disponibilizar os seguintes endpoints JSON:
-
-| Método | Endpoint | Finalidade |
-|---|---|---|
-| GET | `/vagas` | Listar vagas para exibição no portal |
-| POST | `/candidatos` | Criar um candidato |
-| POST | `/inscricoes` | Registrar a inscrição vinculando candidato e vaga |
-| GET | `/` | Teste simples de conexão com a API |
-
-## Publicação no GitHub Pages
-
-A atividade aceita entrega por link público do GitHub, então este frontend pode ser publicado diretamente no GitHub Pages.
-
-### Passos
-
-1. Crie um repositório no GitHub.
-2. Envie os arquivos do projeto.
-3. No repositório, vá em **Settings > Pages**.
-4. Escolha **Deploy from a branch**.
-5. Selecione a branch `main` e a pasta `/root`.
-6. Aguarde a geração da URL pública.
-
-## Execução local do frontend
-
-Como o projeto é estático, o `index.html` pode ser aberto diretamente no navegador. Mesmo assim, para evitar limitações locais, é recomendável utilizar um servidor simples.
-
-Exemplo com Python:
-
-```bash
 python -m http.server 5500
-```
 
-Acesse:
+Acesse http://localhost:5500 no navegador.
 
-```text
-http://localhost:5500
-```
+### Opcao 2 – Abrir diretamente o arquivo
+Voce pode abrir o index.html diretamente, mas alguns recursos (como o modal do Bootstrap) podem ter comportamento limitado. A opcao 1 e preferivel.
 
-## Scripts RPA
+## Publicacao no GitHub Pages
 
-Os scripts de automação foram preparados para cumprir o requisito de envio real via WhatsApp Web e Gmail, com tratamento de erros e geração de logs, conforme os critérios da atividade.
+1. Crie um repositorio publico no GitHub.
+2. Envie todos os arquivos do frontend_AV2 para a branch main.
+3. No repositorio, va em Settings > Pages.
+4. Em Branch, selecione main e a pasta /root.
+5. Salve. O site estara disponivel em https://seu-usuario.github.io/frontend_AV2/.
 
-### Instalação das dependências
+Atencao: O GitHub Pages serve apenas arquivos estaticos. O backend (API) deve continuar rodando em um servidor separado, acessivel via ngrok ou outra forma, e a API_BASE_URL no config.js deve apontar para esse servidor.
 
-Entre na pasta `rpa` e instale os pacotes:
+## Chatbot
 
-```bash
-pip install -r requirements.txt
-```
+O chatbot esta implementado no frontend e se comunica com o endpoint /chat do backend.
+- Se o backend retornar uma resposta, ela e exibida.
+- Se houver falha, o frontend mostra a mensagem padrao: "Desculpe, meu sistema backend esta indisponivel no momento."
 
-### Logs
+A logica de intencao (consulta de vagas, candidatura) pode ser tratada diretamente pelo backend ou por IA. O frontend apenas exibe as respostas e, quando solicitado, rola a tela para os filtros ou exibe avisos.
 
-O arquivo `logger_utils.py` cria automaticamente a pasta `logs/` e grava os arquivos de log da automação. Isso ajuda a registrar sucesso ou falha dos envios, algo explicitamente cobrado na avaliação.
+## Testando a integracao
 
-## WhatsApp
+1. Tenha o backend rodando (ex.: Flask + ngrok).
+2. Atualize API_BASE_URL no config.js com a URL publica do backend.
+3. Abra o frontend (local ou GitHub Pages).
+4. Clique em "Testar conexao" – deve aparecer "Online".
+5. As vagas devem ser carregadas automaticamente.
+6. Use os filtros e a busca para refinar a lista.
+7. Abra o chatbot e digite "vagas" ou "candidatar" para testar as intencoes.
+8. Clique em "Candidatar-se" em uma vaga, preencha o formulario e envie – o backend criara o candidato e a inscricao, disparando as notificacoes RPA.
 
-O script `enviar_whatsapp.py` usa `PyWhatKit` para abrir o WhatsApp Web e disparar uma mensagem para um número válido, conforme exigido pela atividade.
+## Observacoes importantes
 
-### Exemplo de uso
+- O frontend nao executa os scripts de automacao (WhatsApp/E-mail) – eles sao disparados pelo backend apos a inscricao.
+- O botao "Atualizar" recarrega a lista de vagas da API.
+- O tema claro/escuro e salvo pela preferencia do sistema, mas nao ha persistencia entre sessoes (pode ser adicionada futuramente).
+- Para que o chatbot funcione corretamente, o backend deve responder ao endpoint /chat com JSON contendo pelo menos os campos "resposta" e "intencao" (opcional).
 
-```bash
-python enviar_whatsapp.py --numero +5548999999999 --nome "Aluno Teste" --vaga "Assistente Administrativo" --empresa "Empresa Exemplo" --link "https://exemplo.com/vaga"
-```
+## Licenca
 
-### Observações importantes
-
-- O número deve estar no formato internacional.
-- O WhatsApp Web precisa abrir corretamente no navegador.
-- É recomendável já estar logado no WhatsApp Web antes da demonstração.
-- Em alguns computadores, o carregamento pode ser mais lento, então o parâmetro `--esperar` pode ser aumentado.
-
-Exemplo com espera maior:
-
-```bash
-python enviar_whatsapp.py --numero +5548999999999 --nome "Aluno Teste" --vaga "Assistente Administrativo" --empresa "Empresa Exemplo" --esperar 30
-```
-
-## E-mail com Gmail
-
-O script `enviar_email.py` usa `smtplib` com o servidor SMTP do Gmail, o que atende ao requisito de automação por e-mail previsto no projeto.
-
-### Arquivo `.env`
-
-Crie um arquivo `.env` dentro da pasta `rpa/` com as credenciais:
-
-```env
-EMAIL_REMETENTE=seuemail@gmail.com
-EMAIL_SENHA_APP=sua_senha_de_app
-```
-
-### Exemplo de uso
-
-```bash
-python enviar_email.py --destinatario aluno.teste@email.com --nome "Aluno Teste" --vaga "Assistente Administrativo" --empresa "Empresa Exemplo" --link "https://exemplo.com/vaga"
-```
-
-### Observações importantes
-
-- Para Gmail, o ideal é usar **senha de aplicativo**, não a senha normal da conta.
-- A conta pode exigir autenticação em duas etapas para gerar essa senha.
-- Faça um teste antes da apresentação para evitar bloqueios de segurança.
-
-## CORS no backend
-
-Como o frontend e o backend estarão em domínios diferentes, o Flask precisa permitir CORS para o GitHub Pages acessar a API corretamente. Sem isso, o navegador pode bloquear as requisições mesmo com a API online.
-
-Exemplo no Flask:
-
-```python
-from flask_cors import CORS
-CORS(app)
-```
-
-## JSON esperado no endpoint de vagas
-
-O frontend aceita tanto uma lista direta quanto um objeto contendo a chave `vagas`.
-
-### Exemplo 1
-
-```json
-[
-  {
-    "id": 1,
-    "titulo": "Assistente Administrativo",
-    "empresa": "Empresa Exemplo",
-    "descricao": "Apoio a processos administrativos.",
-    "area": "Administrativo",
-    "modalidade": "Presencial",
-    "local": "Palhoça - SC",
-    "salario": "R$ 2.200,00",
-    "link": "https://exemplo.com/vaga"
-  }
-]
-```
-
-### Exemplo 2
-
-```json
-{
-  "vagas": [
-    {
-      "id": 1,
-      "titulo": "Assistente Administrativo",
-      "empresa": "Empresa Exemplo"
-    }
-  ]
-}
-```
-
-## JSON esperado no endpoint de candidatos
-
-O endpoint `/candidatos` deve aceitar um JSON como este:
-
-```json
-{
-  "nome": "Maria Eduarda Schmidt",
-  "email": "maria@example.com",
-  "telefone": "48999999999"
-}
-```
-
-Resposta esperada:
-
-```json
-{
-  "mensagem": "Candidato criado com sucesso!",
-  "id": 1
-}
-```
-
-## JSON esperado no endpoint de inscrições
-
-Após criar o candidato, o frontend envia a inscrição com `candidato_id` e `vaga_id`:
-
-```json
-{
-  "candidato_id": 1,
-  "vaga_id": 2
-}
-```
-
-Resposta esperada:
-
-```json
-{
-  "mensagem": "Inscrição realizada com sucesso!",
-  "id": 10
-}
-```
-
-## Entrega e apresentação
-
-A atividade pede demonstração em tempo real do portal e prova de envio real de WhatsApp e e-mail para um contato válido da turma-alvo. Por isso, a melhor estratégia é:
-
-- publicar o frontend no GitHub Pages;
-- deixar o backend ativo no ngrok;
-- testar CORS e endpoints antes da apresentação;
-- validar o fluxo `candidatos -> inscricoes` antes da banca;
-- deixar o WhatsApp Web já autenticado;
-- deixar o `.env` pronto para o envio do Gmail;
-- executar os scripts RPA localmente no momento da prova.
-
-## Comandos úteis
-
-### Subir o projeto para o GitHub
-
-```bash
-git init
-git add .
-git commit -m "feat: integração frontend com API REST da AV2"
-git branch -M main
-git remote add origin https://github.com/SEU-USUARIO/frontend_AV2.git
-git push -u origin main
-```
-
-### Instalar dependências dos scripts
-
-```bash
-cd rpa
-pip install -r requirements.txt
-```
-
-## Melhorias futuras
-
-Com base nos requisitos da atividade, esta base ainda pode evoluir para:
-
-- formulário real de candidatura integrado ao backend;
-- chatbot com fluxo de saudação, filtro e candidatura;
-- tela de cadastro de candidato com validação visual;
-- integração do frontend com logs de automação;
-- templates mais ricos de mensagem;
-- tela administrativa para disparar notificações.
+Projeto academico, sem fins comerciais. Desenvolvido para a disciplina Linguagem de Programacao III.
