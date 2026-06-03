@@ -34,9 +34,14 @@ function obterCampo(vaga, chaves) {
 function mostrarMensagem(texto, tipo = 'info') {
   elementos.mensagem.textContent = texto;
   elementos.mensagem.className = 'alert custom-alert mt-4';
-  if (tipo === 'erro') elementos.mensagem.classList.add('alert-danger');
-  else if (tipo === 'sucesso') elementos.mensagem.classList.add('alert-success');
-  else elementos.mensagem.classList.add('alert-secondary');
+
+  if (tipo === 'erro') {
+    elementos.mensagem.classList.add('alert-danger');
+  } else if (tipo === 'sucesso') {
+    elementos.mensagem.classList.add('alert-success');
+  } else {
+    elementos.mensagem.classList.add('alert-secondary');
+  }
 }
 
 function esconderMensagem() {
@@ -45,11 +50,21 @@ function esconderMensagem() {
 }
 
 function preencherFiltros(vagas) {
-  const areas = [...new Set(vagas.map(v => obterCampo(v, ['area', 'categoria', 'setor'])).filter(Boolean))].sort();
-  const modalidades = [...new Set(vagas.map(v => obterCampo(v, ['modalidade', 'tipo', 'regime'])).filter(Boolean))].sort();
+  const areas = [...new Set(
+    vagas.map(v => obterCampo(v, ['area', 'categoria', 'setor'])).filter(Boolean)
+  )].sort();
 
-  elementos.filtroArea.innerHTML = '<option value="">Todas</option>' + areas.map(area => `<option value="${area}">${area}</option>`).join('');
-  elementos.filtroModalidade.innerHTML = '<option value="">Todas</option>' + modalidades.map(item => `<option value="${item}">${item}</option>`).join('');
+  const modalidades = [...new Set(
+    vagas.map(v => obterCampo(v, ['modalidade', 'tipo', 'regime'])).filter(Boolean)
+  )].sort();
+
+  elementos.filtroArea.innerHTML =
+    '<option value="">Todas</option>' +
+    areas.map(area => `<option value="${area}">${area}</option>`).join('');
+
+  elementos.filtroModalidade.innerHTML =
+    '<option value="">Todas</option>' +
+    modalidades.map(item => `<option value="${item}">${item}</option>`).join('');
 }
 
 function aplicarFiltros() {
@@ -63,7 +78,12 @@ function aplicarFiltros() {
     const area = normalizarTexto(obterCampo(vaga, ['area', 'categoria', 'setor']));
     const modalidade = normalizarTexto(obterCampo(vaga, ['modalidade', 'tipo', 'regime']));
 
-    const atendeBusca = !termo || titulo.includes(termo) || descricao.includes(termo) || area.includes(termo);
+    const atendeBusca =
+      !termo ||
+      titulo.includes(termo) ||
+      descricao.includes(termo) ||
+      area.includes(termo);
+
     const atendeArea = !areaSelecionada || area === areaSelecionada;
     const atendeModalidade = !modalidadeSelecionada || modalidade === modalidadeSelecionada;
 
@@ -81,17 +101,33 @@ function atualizarIndicadores() {
 
 async function candidatarEmExemplo(vaga) {
   try {
-    const payload = {
+    const vagaId = vaga.id || vaga.vaga_id || null;
+
+    if (!vagaId) {
+      mostrarMensagem('Não foi possível identificar a vaga para candidatura.', 'erro');
+      return;
+    }
+
+    const emailTeste = `maria+${Date.now()}@example.com`;
+
+    const candidato = await criarCandidato({
       nome: 'Maria Eduarda Schmidt',
-      email: 'maria@example.com',
-      vaga_id: vaga.id || vaga.vaga_id || null,
-      vaga_titulo: obterCampo(vaga, ['titulo', 'nome', 'vaga'])
-    };
-    await enviarCandidatura(payload);
+      email: emailTeste,
+      telefone: '48999999999'
+    });
+
+    await criarInscricao({
+      candidato_id: candidato.id,
+      vaga_id: vagaId
+    });
+
     mostrarMensagem('Candidatura enviada com sucesso para teste de integração.', 'sucesso');
   } catch (erro) {
     console.error(erro);
-    mostrarMensagem('Não foi possível enviar a candidatura de teste. Verifique o endpoint /inscricoes.', 'erro');
+    mostrarMensagem(
+      `Não foi possível enviar a candidatura. ${erro.message}`,
+      'erro'
+    );
   }
 }
 
@@ -108,7 +144,9 @@ function criarCardVaga(vaga) {
 
   setTimeout(() => {
     const botao = document.getElementById(idBotao);
-    if (botao) botao.addEventListener('click', () => candidatarEmExemplo(vaga));
+    if (botao) {
+      botao.addEventListener('click', () => candidatarEmExemplo(vaga));
+    }
   }, 0);
 
   return `
@@ -138,7 +176,8 @@ function criarCardVaga(vaga) {
 
 function renderizarVagas() {
   if (!estado.filtradas.length) {
-    elementos.listaVagas.innerHTML = '<div class="col-12"><div class="job-card job-empty">Nenhuma vaga encontrada com os filtros informados.</div></div>';
+    elementos.listaVagas.innerHTML =
+      '<div class="col-12"><div class="job-card job-empty">Nenhuma vaga encontrada com os filtros informados.</div></div>';
     return;
   }
 
@@ -164,7 +203,10 @@ async function carregarVagas() {
     estado.filtradas = [];
     atualizarIndicadores();
     renderizarVagas();
-    mostrarMensagem('Não foi possível carregar a API. Verifique a URL do ngrok, CORS do backend e o endpoint /vagas.', 'erro');
+    mostrarMensagem(
+      'Não foi possível carregar a API. Verifique a URL do ngrok, CORS do backend e o endpoint /vagas.',
+      'erro'
+    );
   } finally {
     elementos.loading.classList.add('d-none');
   }
@@ -178,17 +220,23 @@ async function testarApi() {
   } catch (erro) {
     console.error(erro);
     elementos.statusApi.textContent = 'Indisponível';
-    mostrarMensagem('Falha ao conectar no backend. Confira o link do ngrok e a configuração de CORS.', 'erro');
+    mostrarMensagem(
+      'Falha ao conectar no backend. Confira o link do ngrok e a configuração de CORS.',
+      'erro'
+    );
   }
 }
 
 function configurarTema() {
   let temaAtual = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   document.documentElement.setAttribute('data-theme', temaAtual);
-  elementos.themeToggle.addEventListener('click', () => {
-    temaAtual = temaAtual === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', temaAtual);
-  });
+
+  if (elementos.themeToggle) {
+    elementos.themeToggle.addEventListener('click', () => {
+      temaAtual = temaAtual === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', temaAtual);
+    });
+  }
 }
 
 function registrarEventos() {
