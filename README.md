@@ -35,7 +35,17 @@ O frontend atende ao requisito de interface funcional com consumo real da API e 
 - filtro por modalidade;
 - busca textual;
 - teste de conexão com o backend;
-- botão de candidatura de exemplo para integração com endpoint `POST`.
+- candidatura de teste com criação de candidato e posterior inscrição na vaga.
+
+### Fluxo de candidatura
+
+Para ficar alinhado com a modelagem exigida pela atividade, o frontend realiza a candidatura em duas etapas:
+
+1. envia os dados do candidato para `POST /candidatos`;
+2. recebe o `id` do candidato criado;
+3. envia `candidato_id` e `vaga_id` para `POST /inscricoes`.
+
+Esse fluxo respeita a separação entre as entidades `Candidato`, `Vaga` e `Inscricao`, conforme os requisitos mínimos da avaliação.
 
 ### Configuração da API
 
@@ -45,15 +55,27 @@ Edite `js/config.js` e troque a URL de exemplo pelo link atual do ngrok:
 const API_BASE_URL = "https://SEU-LINK-NGROK.ngrok-free.app";
 ```
 
-Também é possível ajustar os endpoints conforme a implementação do backend:
+Os endpoints atualmente utilizados pelo frontend são:
 
 ```javascript
 const API_ENDPOINTS = {
   vagas: "/vagas",
   health: "/",
+  candidatos: "/candidatos",
   candidatura: "/inscricoes"
 };
 ```
+
+### Endpoints esperados no backend
+
+Para o frontend funcionar corretamente, o backend deve disponibilizar os seguintes endpoints JSON:
+
+| Método | Endpoint | Finalidade |
+|---|---|---|
+| GET | `/vagas` | Listar vagas para exibição no portal |
+| POST | `/candidatos` | Criar um candidato |
+| POST | `/inscricoes` | Registrar a inscrição vinculando candidato e vaga |
+| GET | `/` | Teste simples de conexão com a API |
 
 ## Publicação no GitHub Pages
 
@@ -195,6 +217,47 @@ O frontend aceita tanto uma lista direta quanto um objeto contendo a chave `vaga
 }
 ```
 
+## JSON esperado no endpoint de candidatos
+
+O endpoint `/candidatos` deve aceitar um JSON como este:
+
+```json
+{
+  "nome": "Maria Eduarda Schmidt",
+  "email": "maria@example.com",
+  "telefone": "48999999999"
+}
+```
+
+Resposta esperada:
+
+```json
+{
+  "mensagem": "Candidato criado com sucesso!",
+  "id": 1
+}
+```
+
+## JSON esperado no endpoint de inscrições
+
+Após criar o candidato, o frontend envia a inscrição com `candidato_id` e `vaga_id`:
+
+```json
+{
+  "candidato_id": 1,
+  "vaga_id": 2
+}
+```
+
+Resposta esperada:
+
+```json
+{
+  "mensagem": "Inscrição realizada com sucesso!",
+  "id": 10
+}
+```
+
 ## Entrega e apresentação
 
 A atividade pede demonstração em tempo real do portal e prova de envio real de WhatsApp e e-mail para um contato válido da turma-alvo. Por isso, a melhor estratégia é:
@@ -202,6 +265,7 @@ A atividade pede demonstração em tempo real do portal e prova de envio real de
 - publicar o frontend no GitHub Pages;
 - deixar o backend ativo no ngrok;
 - testar CORS e endpoints antes da apresentação;
+- validar o fluxo `candidatos -> inscricoes` antes da banca;
 - deixar o WhatsApp Web já autenticado;
 - deixar o `.env` pronto para o envio do Gmail;
 - executar os scripts RPA localmente no momento da prova.
@@ -213,7 +277,7 @@ A atividade pede demonstração em tempo real do portal e prova de envio real de
 ```bash
 git init
 git add .
-git commit -m "feat: estrutura inicial do frontend e automações AV2"
+git commit -m "feat: integração frontend com API REST da AV2"
 git branch -M main
 git remote add origin https://github.com/SEU-USUARIO/frontend_AV2.git
 git push -u origin main
@@ -232,6 +296,7 @@ Com base nos requisitos da atividade, esta base ainda pode evoluir para:
 
 - formulário real de candidatura integrado ao backend;
 - chatbot com fluxo de saudação, filtro e candidatura;
+- tela de cadastro de candidato com validação visual;
 - integração do frontend com logs de automação;
 - templates mais ricos de mensagem;
 - tela administrativa para disparar notificações.
