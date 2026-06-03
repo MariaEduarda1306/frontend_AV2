@@ -25,13 +25,14 @@ Projeto de frontend para um portal de vagas de emprego, desenvolvido para a disc
 
 frontend_AV2/
 ├── index.html
+├── README.md
 ├── css/
 │   └── style.css
 ├── js/
-│   ├── config.js     # URL base da API e endpoints
-│   ├── api.js        # Funcoes de requisicao (fetch)
-│   └── app.js        # Logica da interface (filtros, chatbot, candidatura)
-└── README.md
+│   ├── config.js
+│   ├── api.js
+│   └── app.js
+└── rpa/
 
 > Os scripts de automacao RPA (WhatsApp/E-mail) ficam em uma pasta separada (rpa/) e sao executados do lado do backend. Este README trata apenas do frontend.
 
