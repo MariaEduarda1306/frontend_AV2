@@ -262,9 +262,7 @@ function registrarEventos() {
   elementos.busca.addEventListener('input', aplicarFiltros);
   elementos.filtroArea.addEventListener('change', aplicarFiltros);
   elementos.filtroModalidade.addEventListener('change', aplicarFiltros);
-  elementos.btnRecarregar.addEventListener('click', carregarVagas);
-  elementos.btnTestarApi.addEventListener('click', testarApi);
-  
+  elementos.btnRecarregar.addEventListener('click', carregarVagas);  
   // Eventos do Modal
   elementos.btnConfirmarCandidatura.addEventListener('click', processarCandidatura);
 
