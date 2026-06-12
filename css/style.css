@@ -390,21 +390,107 @@ h1, h2, h3, h4, .brand-title, .display-title {
 }
 
 /* ---------- MODAL PROFESSIONAL ---------- */
-.custom-modal .modal-content {
+
+.modal-content.custom-modal {
   background: var(--bg-surface);
-  border-radius: var(--radius-xl);
-  border: none;
   color: var(--text-primary);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border-light);
   box-shadow: var(--shadow-lg);
+  overflow: hidden;
 }
 
-.modal-header, .modal-footer {
-  border-color: var(--border-light);
+.modal-content.custom-modal .modal-header {
+  background: linear-gradient(
+    95deg,
+    var(--primary),
+    var(--primary-dark)
+  );
+  color: white;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.modal-content.custom-modal .modal-title {
+  color: white;
+  font-weight: 700;
+}
+
+.modal-content.custom-modal .modal-body {
   background: var(--bg-surface);
+  color: var(--text-primary);
+  padding: 1.5rem;
 }
 
-.modal-header {
-  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+.modal-content.custom-modal .modal-footer {
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-light);
+}
+
+.modal-content.custom-modal label {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.modal-content.custom-modal p {
+  color: var(--text-secondary);
+}
+
+.modal-content.custom-modal .form-text {
+  color: var(--text-muted);
+}
+
+.modal-content.custom-modal .custom-input {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  color: var(--text-primary);
+}
+
+.modal-content.custom-modal .custom-input::placeholder {
+  color: var(--text-muted);
+}
+
+.modal-content.custom-modal .custom-input:focus {
+  border-color: var(--primary);
+  box-shadow: var(--shadow-focus);
+}
+
+.modal-content.custom-modal .btn-close {
+  filter: brightness(0) invert(1);
+}
+
+.modal-content.custom-modal .alert-success {
+  border: none;
+  border-left: 4px solid var(--secondary);
+  border-radius: var(--radius-md);
+}
+
+.modal-content.custom-modal .alert-danger {
+  border: none;
+  border-left: 4px solid #dc3545;
+  border-radius: var(--radius-md);
+}
+
+@media (max-width: 576px) {
+  .modal-dialog {
+    margin: 0.75rem;
+  }
+
+  .modal-content.custom-modal {
+    border-radius: var(--radius-lg);
+  }
+
+  .modal-content.custom-modal .modal-body {
+    padding: 1rem;
+  }
+
+  .modal-content.custom-modal .modal-footer {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .modal-content.custom-modal .modal-footer button {
+    width: 100%;
+  }
 }
 
 /* ---------- CHATBOT (IA Assistant) ---------- */
