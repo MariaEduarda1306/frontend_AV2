@@ -99,18 +99,18 @@ async function processarCandidatura() {
   const vagaId = elementos.vagaIdInscricao.value;
 
   if (!nome || !email || !vagaId) {
-    mostrarMensagem('Preencha Nome e E-mail.', 'erro', elementos.modalMensagem);
+    mostrarMensagem('Por favor, preencha todos os campos obrigatórios.', 'erro', elementos.modalMensagem);
     return;
   }
 
   try {
     elementos.btnConfirmarCandidatura.disabled = true;
-    elementos.btnConfirmarCandidatura.textContent = 'Enviando...';
+    elementos.btnConfirmarCandidatura.textContent = 'Enviando candidatura...';
 
     const candidato = await criarCandidato({ nome, email, telefone });
     await criarInscricao({ candidato_id: candidato.id, vaga_id: parseInt(vagaId) });
 
-    mostrarMensagem('Candidatura realizada! Os scripts RPA podem ser executados agora.', 'sucesso', elementos.modalMensagem);
+    mostrarMensagem('Sua candidatura foi enviada com sucesso! Você receberá atualizações por e-mail e WhatsApp.', 'sucesso', elementos.modalMensagem);
     
     // Limpar campos
     elementos.inputNome.value = '';
@@ -119,7 +119,7 @@ async function processarCandidatura() {
 
   } catch (erro) {
     console.error(erro);
-    mostrarMensagem(`Erro: ${erro.message}`, 'erro', elementos.modalMensagem);
+    mostrarMensagem('Não foi possível concluir sua candidatura. Verifique os dados informados e tente novamente.', 'erro', elementos.modalMensagem);
   } finally {
     elementos.btnConfirmarCandidatura.disabled = false;
     elementos.btnConfirmarCandidatura.textContent = 'Enviar Candidatura';
@@ -180,7 +180,7 @@ async function carregarVagas() {
     elementos.statusApi.textContent = 'Conectado';
   } catch (erro) {
     elementos.statusApi.textContent = 'Falha';
-    mostrarMensagem('Falha ao carregar API. Verifique a URL do ngrok.', 'erro');
+    mostrarMensagem('Não foi possível carregar as vagas no momento. Tente novamente mais tarde.', 'erro');
   } finally {
     elementos.loading.classList.add('d-none');
   }
@@ -190,10 +190,10 @@ async function testarApi() {
   try {
     await testarConexaoApi();
     elementos.statusApi.textContent = 'Online';
-    mostrarMensagem('Conexão com a API realizada com sucesso.', 'sucesso');
+    mostrarMensagem('Sistema funcionando normalmente.', 'sucesso');
   } catch (erro) {
     elementos.statusApi.textContent = 'Indisponível';
-    mostrarMensagem('Falha ao conectar no backend.', 'erro');
+    mostrarMensagem('O sistema está temporariamente indisponível.', 'erro');
   }
 }
 
@@ -235,7 +235,7 @@ async function handleEnviarChat() {
         document.getElementById('filtros').scrollIntoView({ behavior: 'smooth' });
     } else if (resposta.intencao === 'candidatura') {
         // Exibe um aviso em tela orientando o usuário a clicar nos botões das vagas
-        mostrarMensagem('Por favor, clique em "Candidatar-se" no card da vaga desejada para abrir o formulário.', 'info');
+        mostrarMensagem('Selecione a vaga desejada e clique em "Candidatar-se" para continuar.', 'info');
         document.getElementById('filtros').scrollIntoView({ behavior: 'smooth' });
     }
 
@@ -243,7 +243,7 @@ async function handleEnviarChat() {
     if (document.getElementById(idTyping)) {
         document.getElementById(idTyping).remove();
     }
-    adicionarMensagemChat('Desculpe, meu sistema backend está indisponível no momento.', 'bot');
+    adicionarMensagemChat('Desculpe, não consegui responder sua solicitação no momento. Tente novamente em alguns instantes.', 'bot');
   }
 }
 
